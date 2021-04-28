@@ -6,7 +6,7 @@
 */
 
 #include "base.h"
-namespace Menu {
+namespace Parts {
   //static tree reference using positions chain
   template<Idx... path>
   struct Path {

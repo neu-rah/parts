@@ -17,7 +17,7 @@
 using namespace CRTPMix;
 // #include "menu/sys/kernel/debug.h"
 
-namespace Menu {
+namespace Parts {
 
   using Idx=uint16_t;//array size type
   using Key=int;//key type
@@ -174,7 +174,7 @@ namespace Menu {
 
 #include "menu/sys/kernel/menuDebug.h"
 #ifdef RS_DEBUG
-namespace Menu {
+namespace Parts {
   template<typename T>
   MDO& operator<<(MDO& mdo,T data) {
     MDO::print(data);

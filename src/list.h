@@ -4,7 +4,7 @@
 #include "path.h"
 // #include "menu/item.h"
 
-namespace Menu {
+namespace Parts {
 
   //Pair class
   template<typename Fst,typename Snd>
