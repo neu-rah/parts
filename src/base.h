@@ -13,9 +13,9 @@
   using byte=unsigned char;
 #endif
 
-#include "mods/CRTPMix/CRTPMix.h"
+#include "../CRTPMix/CRTPMix.h"
 using namespace CRTPMix;
-#include "menu/sys/kernel/debug.h"
+// #include "menu/sys/kernel/debug.h"
 
 namespace Menu {
 
