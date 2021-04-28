@@ -7,6 +7,7 @@
     // #include <streamFlow.h>
     #include "debug.h"
   #endif
+  using uint16_t=word;
 #else
   #include <cstddef>
   #include <cassert>
