@@ -136,7 +136,7 @@ namespace Parts {
   template<typename Fst>
   struct StaticList<Fst,Nil>:Fst {
     using Fst::Fst;
-    using This=StaticList<Fst,Empty<>>;
+    using This=StaticList<Fst,Nil>;
     inline StaticList() {}
     inline StaticList(Fst f):Fst(f) {}
     using Head=Fst;
