@@ -10,6 +10,7 @@
   using uint16_t=word;
 #else
   #include <cstddef>
+  #include <cstdint> 
   #include <cassert>
   using byte=unsigned char;
 #endif
