@@ -53,7 +53,7 @@ namespace Parts {
     }
   };
 
-  #if defined(RS_DEBUG)
-    MDO& operator<<(MDO& out,const PathRef& path) {return path.operator<<(out);}
-  #endif
+  // #if defined(RS_DEBUG)
+  //   MDO& operator<<(MDO& out,const PathRef& path) {return path.operator<<(out);}
+  // #endif
 };
