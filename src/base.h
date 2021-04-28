@@ -172,39 +172,39 @@ namespace Parts {
   _trace(MDO& operator<<(MDO& o,const name& api) {return api.operator<<(o);})
 };
 
-#include "menu/sys/kernel/menuDebug.h"
-#ifdef RS_DEBUG
-namespace Parts {
-  template<typename T>
-  MDO& operator<<(MDO& mdo,T data) {
-    MDO::print(data);
-    return mdo;
-  }
+// #include "menu/sys/kernel/menuDebug.h"
+// #ifdef RS_DEBUG
+// namespace Parts {
+//   template<typename T>
+//   MDO& operator<<(MDO& mdo,T data) {
+//     MDO::print(data);
+//     return mdo;
+//   }
 
-  MDO& operator<<(MDO& o,const Style s) {
-    if(s==Style::None) o<<"|None";
-    else {
-      if(has<Style::IsMenu>(s)) o<<"|IsMenu";
-      if(has<Style::WrapNav>(s)) o<<"|WrapNav";
-      if(has<Style::ParentDraw>(s)) o<<"|ParentDraw";
-    }
-    o<<"|";
-    // else if(has<Style::IsMenu>(s)) o<<"IsMenu";
-    return o;
-  }
-  MDO& operator<<(MDO& o,const Cmd c) {
-    switch(c) {
-      case Cmd::Enter: o<<"Enter";break;
-      case Cmd::Esc: o<<"Esc";break;
-      case Cmd::Up: o<<"Up";break;
-      case Cmd::Down: o<<"Down";break;
-      case Cmd::Left: o<<"Left";break;
-      case Cmd::Right: o<<"Right";break;
-      case Cmd::Key: o<<"Key";break;
-    }
-    return o;
-  }
+//   MDO& operator<<(MDO& o,const Style s) {
+//     if(s==Style::None) o<<"|None";
+//     else {
+//       if(has<Style::IsMenu>(s)) o<<"|IsMenu";
+//       if(has<Style::WrapNav>(s)) o<<"|WrapNav";
+//       if(has<Style::ParentDraw>(s)) o<<"|ParentDraw";
+//     }
+//     o<<"|";
+//     // else if(has<Style::IsMenu>(s)) o<<"IsMenu";
+//     return o;
+//   }
+//   MDO& operator<<(MDO& o,const Cmd c) {
+//     switch(c) {
+//       case Cmd::Enter: o<<"Enter";break;
+//       case Cmd::Esc: o<<"Esc";break;
+//       case Cmd::Up: o<<"Up";break;
+//       case Cmd::Down: o<<"Down";break;
+//       case Cmd::Left: o<<"Left";break;
+//       case Cmd::Right: o<<"Right";break;
+//       case Cmd::Key: o<<"Key";break;
+//     }
+//     return o;
+//   }
 
-};
-#endif
+// };
+// #endif
 
