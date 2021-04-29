@@ -17,5 +17,10 @@
 
 #include "../CRTPMix/CRTPMix.h"
 using namespace CRTPMix;
-// #include "menu/sys/kernel/debug.h"
+
+//the empty API
+struct Nil {
+  using This=Nil;
+};
+
 
