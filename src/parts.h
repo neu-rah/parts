@@ -12,7 +12,11 @@ struct name {\
 
 namespace Parts {
   struct DefaultCfg {
-    using Idx=int;
+    #ifdef Arduino
+      using Idx=byte;
+    #else
+      using Idx=int;
+    #endif
   };
   template<typename Cfg=DefaultCfg>
   struct Config {
