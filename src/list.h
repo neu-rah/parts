@@ -53,6 +53,14 @@ namespace Parts {
       );
     }
 
+    template<typename API,typename... Args>
+    void forAll(Args... args) {
+      Pair<decltype(API().operator()(head(),args...)),decltype(tail().template forAll<API,Args...>(args...))>(
+        API().operator()(head(),args...),
+        tail().template forAll<API,Args...>(args...)
+      );
+    }
+
     struct RefWalk {
       Idx pathLen;
       const Idx* path;
@@ -160,6 +168,9 @@ namespace Parts {
     auto map(Args... args) 
       ->decltype(API().operator()(*this,args...))
       {return API().operator()(*this,args...);}
+
+    template<typename API,typename... Args>
+    void forAll(Args... args) {API().operator()(*this,args...);}
 
     struct RefWalk {
       Idx pathLen;
