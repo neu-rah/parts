@@ -16,9 +16,17 @@ namespace Parts {
     Head& head() {return _head;}
     Tail& tail() {return _tail;}
     Pair(Fst f,Snd s):_head(f),_tail(s) {}
+    static constexpr Idx length() {return 1+tail().length();}
   };
+  template<typename Fst>
+  struct Pair<Fst,void> {
+    static constexpr Idx length() {return 1;}
+  };
+
   template<>
-  struct Pair<void,void> {};
+  struct Pair<void,void> {
+    static constexpr Idx length() {return 1;}
+  };
 
   //StaticList class
   //a pair exposing first element (head) API
@@ -171,8 +179,8 @@ namespace Parts {
 
     template<typename API,typename... Args>
     auto map(Args... args) 
-      ->decltype(API().operator()(*this,args...))
-      {return API().operator()(*this,args...);}
+      ->Pair<decltype(API().operator()(*this,args...)),void>
+      {return Pair<API().operator()(*this,args...),void>;}
 
     template<typename API,typename... Args>
     void forAll(Args... args) {API().operator()(*this,args...);}
