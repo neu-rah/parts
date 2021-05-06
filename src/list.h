@@ -45,9 +45,14 @@ namespace Parts {
 
     template<typename API,typename... Args>
     auto map(Args... args) 
-      ->Pair<decltype(API().operator()(head(),args...)),decltype(tail().template map<API,Args...>(args...))>
-    {
-      return Pair<decltype(API().operator()(head(),args...)),decltype(tail().template map<API,Args...>(args...))>(
+      ->Pair<
+        decltype(API().operator()(head(),args...)),
+        decltype(tail().template map<API,Args...>(args...))
+      > {
+      return Pair<
+        decltype(API().operator()(head(),args...)),
+        decltype(tail().template map<API,Args...>(args...))
+        >(
         API().operator()(head(),args...),
         tail().template map<API,Args...>(args...)
       );
