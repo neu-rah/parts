@@ -53,7 +53,7 @@ using Items=StaticList<Title,Body>;
 Items items(title,body);
 
 int main() {
-  // items.template drop<0>().head().print();
-  items.template map<Print>();
+  items.template drop<0>().head().print();
+  // items.template map<Print>();
   return 0;
 }
