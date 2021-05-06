@@ -18,7 +18,7 @@
 #endif
 
 #include "../CRTPMix/CRTPMix.h"
-// using namespace CRTPMix;
+using namespace CRTPMix;
 
 //the empty API
 namespace Parts {
