@@ -22,6 +22,9 @@ namespace Parts {
   struct Config {
     using Idx=typename Cfg::Idx;
 
+    template<typename Target,Idx n>
+    using Drop=PartsDef::Drop<Cfg,Target,n>;
+
     template<Idx... path>
     using Path=PartsDef::Path<Cfg,path...>;
 

@@ -9,6 +9,20 @@
 namespace Parts {
 
   namespace PartsDef {
+    //static dropping from static list
+
+    template<typename Cfg,typename Target,typename Cfg::Idx n>
+    struct Drop {
+      static auto drop(const Target& target)
+        ->decltype(Drop<Cfg,typename Target::Tail,n-1>::drop(target.tail()))
+        {return Drop<Cfg,typename Target::Tail,n-1>::drop(target.tail());}
+    };
+    //static dropping from static empty list
+    template<typename Cfg,typename Target>
+    struct Drop<Cfg,Target,0> {
+      static Target drop(const Target& target) {return target;}
+    };
+
     //static tree reference using positions chain
     template<typename Cfg,typename Cfg::Idx... path>
     struct Path {

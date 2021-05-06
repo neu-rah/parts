@@ -29,13 +29,17 @@ namespace Parts {
       using This=StaticList<Cfg,Fst,Snd>;
       using Fst::Fst;
       // inline StaticList() {}
-      // template<typename... OO>
-      // StaticList(Fst f,OO... s):Fst(f),_tail(s...) {}
+      template<typename... OO>
+      StaticList(Fst f,OO... s):Fst(f),_tail(s...) {}
       Snd _tail;
       using Head=Fst;
       using Tail=Snd;
       Head& head() {return *this;}
       Tail& tail() {return _tail;}
+      template<Idx n>
+      auto drop()
+        ->decltype(Drop<Cfg,This,n>::drop(*this))
+        {return Drop<Cfg,This,n>::drop(*this);}
 
       template<typename API,int i,typename... Args>
       Idx find(Args... args) 
@@ -145,6 +149,11 @@ namespace Parts {
       using Head=Fst;
       using Tail=Nil;
       Head& head() {return *this;}
+
+      template<Idx n>
+      auto drop()
+        ->decltype(Drop<Cfg,This,n>::drop(*this))
+        {return Drop<Cfg,This,n>::drop(*this);}
 
       template<typename API,int i,typename... Args>
       Idx find(Args... args) 
