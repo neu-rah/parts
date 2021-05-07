@@ -6,6 +6,34 @@
 
 namespace Parts {
 
+  // APIDEF(map,Map);
+  // #define APIDEF(memberFunc,name)
+  // template<typename... TAs>
+  // struct Map {
+  // template<typename T,typename... Args>
+  // inline auto operator()(T& o,Args... args)
+  //   ->decltype(o.template map<TAs...>(args...))
+  //   {return o.template map<TAs...>(args...);}
+  // };
+
+  template<typename API,typename... Args>
+  struct Map {
+    constexpr static const char* named="Map";
+    // _trace(MDO& operator<<(MDO& o) const {return o<<named<<"<"<<API()<<">";});
+    template<typename T>
+    inline auto operator()(T& o,Args... args)
+      ->decltype(o.template map<API,Args...>(args...)) 
+      {return o.template map<API,Args...>(args...);}
+  };
+
+  template<typename API,typename... Args>
+  struct ForAll {
+    constexpr static const char* named="Map";
+    template<typename T>
+    inline void operator()(T& o,Args... args)
+      {o.template forAll<API,Args...>(args...);}
+  };
+
   //Pair class
   template<typename Fst,typename Snd>
   struct Pair {
@@ -16,10 +44,12 @@ namespace Parts {
     Head& head() {return _head;}
     Tail& tail() {return _tail;}
     Pair(Fst f,Snd s):_head(f),_tail(s) {}
-    static constexpr Idx length() {return 1+tail().length();}
+    Idx length() {return 1+tail().length();}
   };
   template<typename Fst>
   struct Pair<Fst,void> {
+    Fst _head;
+    Pair(Fst f):_head(f) {}
     static constexpr Idx length() {return 1;}
   };
 
@@ -68,10 +98,8 @@ namespace Parts {
 
     template<typename API,typename... Args>
     void forAll(Args... args) {
-      Pair<decltype(API().operator()(head(),args...)),decltype(tail().template forAll<API,Args...>(args...))>(
-        API().operator()(head(),args...),
-        tail().template forAll<API,Args...>(args...)
-      );
+      API().operator()(head(),args...);
+      tail().template forAll<API,Args...>(args...);
     }
 
     struct RefWalk {
@@ -167,6 +195,7 @@ namespace Parts {
     using Head=Fst;
     using Tail=Nil;
     Head& head() {return *this;}
+    This& self() {return *this;}
 
     template<Idx n>
     auto drop()
@@ -179,8 +208,8 @@ namespace Parts {
 
     template<typename API,typename... Args>
     auto map(Args... args) 
-      ->Pair<decltype(API().operator()(*this,args...)),void>
-      {return Pair<API().operator()(*this,args...),void>;}
+      ->Pair<decltype(API().operator()(self(),args...)),void>
+      {return Pair<decltype(API().operator()(self(),args...)),void>(API().operator()(self(),args...));}
 
     template<typename API,typename... Args>
     void forAll(Args... args) {API().operator()(*this,args...);}
