@@ -44,18 +44,18 @@ namespace Parts {
     Head& head() {return _head;}
     Tail& tail() {return _tail;}
     Pair(Fst f,Snd s):_head(f),_tail(s) {}
-    Idx length() {return 1+tail().length();}
+    Idx len() {return 1+tail().len();}
   };
   template<typename Fst>
   struct Pair<Fst,void> {
     Fst _head;
     Pair(Fst f):_head(f) {}
-    static constexpr Idx length() {return 1;}
+    static constexpr Idx len() {return 1;}
   };
 
   template<>
   struct Pair<void,void> {
-    static constexpr Idx length() {return 1;}
+    static constexpr Idx len() {return 1;}
   };
 
   //StaticList class
