@@ -34,7 +34,7 @@ struct name {\
 //     using Pair=PartsDef::Pair<Cfg,Fst,Snd>;
 
 //     template<typename Fst,typename Snd>
-//     using StaticList=PartsDef::StaticList<Cfg,Fst,Snd>;
+//     using Node=PartsDef::Node<Cfg,Fst,Snd>;
 
 //   };
 // };

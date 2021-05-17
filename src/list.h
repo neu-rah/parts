@@ -35,38 +35,43 @@ namespace Parts {
   };
 
   //Pair class
-  template<typename Fst,typename Snd>
+  template<typename First,typename Second>
   struct Pair {
-    Fst _head;
-    Snd _tail;
-    using Head=Fst;
-    using Tail=Snd;
-    Head& head() {return _head;}
-    Tail& tail() {return _tail;}
-    Pair(Fst f,Snd s):_head(f),_tail(s) {}
-    Idx len() {return 1+tail().len();}
+    First _fst;
+    Second _snd;
+    using Fst=First;
+    using Snd=Second;
+    Fst& fst() {return _fst;}
+    Snd& snd() {return _snd;}
+    Pair() {}
+    Pair(Fst f,Snd s):_fst(f),_snd(s) {}
+    constexpr Idx len() {return 1+snd().len();}
   };
-  template<typename Fst>
-  struct Pair<Fst,void> {
-    Fst _head;
-    Pair(Fst f):_head(f) {}
+  template<typename First>
+  struct Pair<First,void> {
+    First _fst;
+    using Fst=First;
+    Fst& fst() {return _fst;}
+    Pair() {}
+    Pair(Fst f):_fst(f) {}
     static constexpr Idx len() {return 1;}
   };
 
   template<>
   struct Pair<void,void> {
-    static constexpr Idx len() {return 1;}
+    static constexpr Idx len() {return 0;}
+    Pair() {}
   };
 
-  //StaticList class
+  //Node class
   //a pair exposing first element (head) API
   template<typename Fst,typename Snd>
-  struct StaticList:Fst {
-    using This=StaticList<Fst,Snd>;
+  struct Node:Fst {
+    using This=Node<Fst,Snd>;
     using Fst::Fst;
-    // inline StaticList() {}
+    // inline Node() {}
     template<typename... OO>
-    StaticList(Fst f,OO... s):Fst(f),_tail(s...) {}
+    Node(Fst f,OO... s):Fst(f),_tail(s...) {}
     Snd _tail;
     using Head=Fst;
     using Tail=Snd;
@@ -187,11 +192,11 @@ namespace Parts {
   
   //list end
   template<typename Fst>
-  struct StaticList<Fst,Nil>:Fst {
+  struct Node<Fst,Nil>:Fst {
     using Fst::Fst;
-    using This=StaticList<Fst,Nil>;
-    inline StaticList() {}
-    inline StaticList(Fst f):Fst(f) {}
+    using This=Node<Fst,Nil>;
+    inline Node() {}
+    inline Node(Fst f):Fst(f) {}
     using Head=Fst;
     using Tail=Nil;
     Head& head() {return *this;}
@@ -267,4 +272,20 @@ namespace Parts {
     static constexpr Idx _sz() {return 1;}
   };
 
+  template<typename O,typename... OO>
+  struct StaticList:Pair<O,StaticList<OO...>>{
+    using Base=Pair<O,StaticList<OO...>>;
+    using This=StaticList<O,OO...>;
+    using Base::Base;
+    StaticList(O o,OO... oo):Base(o,StaticList(oo...)) {}
+    typename Base::Fst head() {return Base::fst();}
+    typename Base::Snd tail() {return Base::snd();}
+  };
+  template<typename O>
+  struct StaticList<O>:Pair<O,void>{
+    using Base=Pair<O,void>;
+    using This=StaticList<O>;
+    using Base::Base;
+    typename Base::Fst head() {return Base::fst();}
+  };
 };
