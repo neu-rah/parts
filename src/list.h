@@ -45,7 +45,7 @@ namespace Parts {
     Snd& snd() {return _snd;}
     Pair() {}
     Pair(Fst f,Snd s):_fst(f),_snd(s) {}
-    constexpr Idx len() {return 1+snd().len();}
+    static constexpr Idx len() {return 1+Snd::len();}
   };
   template<typename First>
   struct Pair<First,void> {
@@ -280,6 +280,11 @@ namespace Parts {
     StaticList(O o,OO... oo):Base(o,StaticList(oo...)) {}
     typename Base::Fst head() {return Base::fst();}
     typename Base::Snd tail() {return Base::snd();}
+
+    template<Idx n>
+    auto staticDrop()
+      ->decltype(n?tail().template staticDrop<n-1>():head()) 
+      {return n?tail().template staticDrop<n-1>():head();}
   };
   template<typename O>
   struct StaticList<O>:Pair<O,void>{
@@ -287,5 +292,7 @@ namespace Parts {
     using This=StaticList<O>;
     using Base::Base;
     typename Base::Fst head() {return Base::fst();}
+    template<Idx n>
+    This staticDrop() {static_assert(!n);return *this;}
   };
 };
