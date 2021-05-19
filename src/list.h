@@ -273,11 +273,11 @@ namespace Parts {
   };
 
   template<typename O,typename... OO>
-  struct StaticList:Pair<O,StaticList<OO...>>{
-    using Base=Pair<O,StaticList<OO...>>;
-    using This=StaticList<O,OO...>;
+  struct TypeList:Pair<O,TypeList<OO...>>{
+    using Base=Pair<O,TypeList<OO...>>;
+    using This=TypeList<O,OO...>;
     using Base::Base;
-    StaticList(O o,OO... oo):Base(o,StaticList(oo...)) {}
+    TypeList(O o,OO... oo):Base(o,TypeList(oo...)) {}
     typename Base::Fst head() {return Base::fst();}
     typename Base::Snd tail() {return Base::snd();}
 
@@ -287,12 +287,13 @@ namespace Parts {
       {return n?tail().template staticDrop<n-1>():head();}
   };
   template<typename O>
-  struct StaticList<O>:Pair<O,void>{
+  struct TypeList<O>:Pair<O,void>{
     using Base=Pair<O,void>;
-    using This=StaticList<O>;
+    using This=TypeList<O>;
     using Base::Base;
     typename Base::Fst head() {return Base::fst();}
     template<Idx n>
     This staticDrop() {static_assert(!n);return *this;}
   };
+
 };
