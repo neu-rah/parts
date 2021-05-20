@@ -247,15 +247,16 @@ namespace Parts {
       Walk(Target& t):target(t) {}
       template<typename API,typename... Args>
       auto walk(Args... args) 
-        ->decltype(o?
-          typename Target::Tail::template Walk<decltype(target.tail()),o-1,oo...>(target.tail()).template walk<API,Args...>(args...):
+        ->decltype(
+          // o?
+          // typename Target::Tail::template Walk<decltype(target.tail()),o-1,oo...>(target.tail()).template walk<API,Args...>(args...):
           typename Target::Head::template Walk<typename Target::Head,oo...>(target.head()).template walk<API,Args...>(args...)
         ) {
-        using T=typename Target::Tail::template Walk<decltype(target.tail()),o-1,oo...>;
+        // using T=typename Target::Tail::template Walk<decltype(target.tail()),o-1,oo...>;
         using H=typename Target::Head::template Walk<typename Target::Head,oo...>;
-        return o?
-          T(target.tail()).template walk<API,Args...>(args...):
-          H(target.head()).template walk<API,Args...>(args...);
+        // return o?
+        //   T(target.tail()).template walk<API,Args...>(args...):
+        return H(target.head()).template walk<API,Args...>(args...);
       }
     };
 
