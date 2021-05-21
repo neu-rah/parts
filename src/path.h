@@ -6,6 +6,7 @@
 */
 
 #include "base.h"
+#include "debug.hpp"
 namespace Parts {
 
   //static dropping from static list
@@ -52,6 +53,7 @@ namespace Parts {
       )
     {
       using T=typename Target::RefWalk;
+      // _trace(clog<<"PathRef::walk len:"<<len()<<"\n\r");
       return len()?
         T(pathLen-1,(Idx*)&path[1])
           .template step<Target,API,Args...>

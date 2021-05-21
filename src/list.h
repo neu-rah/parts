@@ -123,12 +123,16 @@ namespace Parts {
               API().operator()(target,args...)
         ) {
         if(at) {
+          // _trace(clog<<"count down "<<(at-1)<<"\n\r");
           using T=typename Target::Tail::RefWalk;
           return T(pathLen,(Idx*)path).template step<typename Target::Tail,API,Args...>(at-1,target.tail(),args...);
         } else if(len()) {
+          // _trace(clog<<"this path len:"<<len()<<"\n\r");
           using H=typename Target::Head::RefWalk;
           return H(pathLen-1,(Idx*)&path[1]).template step<typename Target::Head,API,Args...>(head(),target.head(),args...);
-        } else return API().operator()(target.head(),args...);
+        }
+          // _trace(clog<<"API call on head."<<"\n\r");
+        return API().operator()(target.head(),args...);
       }
     };
 
@@ -234,10 +238,12 @@ namespace Parts {
             typename Target::Head::RefWalk(pathLen-1,(Idx*)&path[1]).template step<typename Target::Head,API,Args...>(head(),target.head(),args...):
             API().operator()(target,args...)
         ) {
+        // _trace(clog<<"RefWalk<Fst> len:"<<len()<<" at:"<<at<<"\n\r");
+        assert(!at);
         using H=typename Target::Head::RefWalk;
         return len()?
           H(pathLen-1,(Idx*)&path[1]).template step<typename Target::Head,API,Args...>(head(),target.head(),args...):
-          API().operator()(target,args...);
+          API().operator()(target.head(),args...);
       }
     };
 

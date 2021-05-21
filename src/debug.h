@@ -13,6 +13,7 @@
 #else
   #if defined(RS_DEBUG)
     #ifdef ARDUINO
+      #include <Arduino.h>
       #ifdef CLOG_DEVICE
         #define clogDev CLOG_DEVICE
       #else 
@@ -23,16 +24,16 @@
       struct CLog {
         enum Fmt:int {None=0,Hex=16,Dec=10,Oct=8,Bin=2};
         Fmt next=None;
-        template<typename T> size_t print(T o) {
+        template<typename T> int print(T o) {
           Fmt f=next;
           next=None;
           return f==None?clogDev.print(o):clogDev.print(o,(int)f);
         }
-      } clog;
-      template<> size_t CLog::template print<const char*>(const char* o) {return clogDev.print(o);}
-      template<> size_t CLog::template print<CLog::Fmt>(CLog::Fmt fmt) {next=fmt;return 0;}
-
-      constexpr CLog::Fmt hex=CLog::Fmt::Hex;
+      };
+      extern CLog clog;
+      template<> int CLog::template print<const char*>(const char* o) {return clogDev.print(o);}
+      template<> int CLog::template print<CLog::Fmt>(CLog::Fmt fmt) {next=fmt;return 0;}
+      CLog::Fmt hex=CLog::Fmt::Hex;
       constexpr CLog::Fmt dec=CLog::Fmt::Dec;
       constexpr CLog::Fmt oct=CLog::Fmt::Oct;
       constexpr CLog::Fmt bin=CLog::Fmt::Bin;
