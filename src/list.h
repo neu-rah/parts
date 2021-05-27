@@ -18,8 +18,6 @@ namespace Parts {
 
   template<typename API,typename... Args>
   struct Map {
-    constexpr static const char* named="Map";
-    // _trace(MDO& operator<<(MDO& o) const {return o<<named<<"<"<<API()<<">";});
     template<typename T>
     inline auto operator()(T& o,Args... args)
       ->decltype(o.template map<API,Args...>(args...)) 
@@ -28,10 +26,11 @@ namespace Parts {
 
   template<typename API,typename... Args>
   struct ForAll {
-    constexpr static const char* named="Map";
     template<typename T>
     inline void operator()(T& o,Args... args)
-      {o.template forAll<API,Args...>(args...);}
+      {
+        // _trace(clog<<"ForAll API"<<endl);
+        o.template forAll<API,Args...>(args...);}
   };
 
   //Pair class
@@ -46,6 +45,12 @@ namespace Parts {
     Pair() {}
     Pair(Fst f,Snd s):_fst(f),_snd(s) {}
     static constexpr Idx len() {return 1+Snd::len();}
+    template<typename Func,Func fmap>
+    auto map()
+      -> decltype(Pair<decltype(fmap(fst())),decltype(snd().map(fmap))>(fmap(fst()),snd().map(fmap))) 
+      {return Pair<decltype(fmap(fst())),decltype(snd().map(fmap))>(fmap(fst()),snd().map(fmap));}
+    template<typename R>
+    R fold(R(*f)(R,Fst),R o) {return snd().fold(f,f(o,fst()));}
   };
   template<typename First>
   struct Pair<First,void> {
@@ -55,13 +60,27 @@ namespace Parts {
     Pair() {}
     Pair(Fst f):_fst(f) {}
     static constexpr Idx len() {return 1;}
+    template<typename Func,Func fmap>
+    auto map()
+      -> decltype(Pair<decltype(fmap(fst())),void>(fmap(fst()))) 
+      {return Pair<decltype(fmap(fst())),void>(fmap(fst()));}
+    template<typename R>
+    R fold(R(*f)(R,Fst),R o) {return f(o,fst());}
   };
 
   template<>
   struct Pair<void,void> {
     static constexpr Idx len() {return 0;}
     Pair() {}
+    template<typename R>
+    R fold(R(*)(R,R),R o) {return o;}
   };
+
+  APIDEF(head,Head);
+  APIDEF(tail,Tail);
+  APIDEF(find,Find);
+  // APIDEF(map,Map);
+  // APIDEF(forAll,ForAll);
 
   //Node class
   //a pair exposing first element (head) API
@@ -103,6 +122,7 @@ namespace Parts {
 
     template<typename API,typename... Args>
     void forAll(Args... args) {
+      // _trace(clog<<"forall recursion..."<<endl);
       API().operator()(head(),args...);
       tail().template forAll<API,Args...>(args...);
     }
@@ -218,7 +238,11 @@ namespace Parts {
     template<typename API,typename... Args>
     auto map(Args... args) 
       ->Pair<decltype(API().operator()(self(),args...)),void>
-      {return Pair<decltype(API().operator()(self(),args...)),void>(API().operator()(self(),args...));}
+      {
+        return Pair
+          <decltype(API().operator()(self(),args...)), void>
+          (API().operator()(self(), args...));
+      }
 
     template<typename API,typename... Args>
     void forAll(Args... args) {API().operator()(*this,args...);}
@@ -238,7 +262,6 @@ namespace Parts {
             typename Target::Head::RefWalk(pathLen-1,(Idx*)&path[1]).template step<typename Target::Head,API,Args...>(head(),target.head(),args...):
             API().operator()(target,args...)
         ) {
-        // _trace(clog<<"RefWalk<Fst> len:"<<len()<<" at:"<<at<<"\n\r");
         assert(!at);
         using H=typename Target::Head::RefWalk;
         return len()?
@@ -272,8 +295,8 @@ namespace Parts {
       Walk(Target& t):target(t) {}
       template<typename API,typename... Args>
       auto walk(Args... args) 
-        ->decltype(API().operator()(target,args...))
-        {assert(!o);return API().operator()(target,args...);}
+        ->decltype(API().operator()(target.head(),args...))
+        {assert(!o);return API().operator()(target.head(),args...);}
     };
 
     static constexpr Idx _sz() {return 1;}

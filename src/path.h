@@ -1,4 +1,3 @@
-/* -*- C++ -*- */
 #pragma once
 /**
 * @author Rui Azevedo
