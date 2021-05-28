@@ -51,6 +51,11 @@ namespace Parts {
       {return Pair<decltype(fmap(fst())),decltype(snd().map(fmap))>(fmap(fst()),snd().map(fmap));}
     template<typename R>
     R fold(R(*f)(R,Fst),R o) {return snd().fold(f,f(o,fst()));}
+    template<typename API>
+    void forAll() {
+      API().operator()(fst());
+      snd().template forAll<API>();
+    }
   };
   template<typename First>
   struct Pair<First,void> {
@@ -66,6 +71,8 @@ namespace Parts {
       {return Pair<decltype(fmap(fst())),void>(fmap(fst()));}
     template<typename R>
     R fold(R(*f)(R,Fst),R o) {return f(o,fst());}
+    template<typename API>
+    void forAll() {API().operator()(fst());}
   };
 
   template<>
@@ -321,6 +328,7 @@ namespace Parts {
     using Base=Pair<O,void>;
     using This=TypeList<O>;
     using Base::Base;
+    TypeList(O o):Base(o) {}
     typename Base::Fst head() {return Base::fst();}
     template<Idx n>
     This staticDrop() {static_assert(!n);return *this;}

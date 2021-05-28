@@ -3,7 +3,7 @@
 #define APIDEF(memberFunc,name)\
 struct name {\
   template<typename T,typename... Args>\
-  inline auto operator()(T& o,Args... args)\
+  inline auto operator()(T& o,Args&... args)\
     ->decltype(o.memberFunc(args...))\
     {return o.memberFunc(args...);}\
 };
