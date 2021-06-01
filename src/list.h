@@ -50,7 +50,7 @@ namespace Parts {
       -> decltype(Pair<decltype(fmap(fst())),decltype(snd().map(fmap))>(fmap(fst()),snd().map(fmap))) 
       {return Pair<decltype(fmap(fst())),decltype(snd().map(fmap))>(fmap(fst()),snd().map(fmap));}
     template<typename R>
-    R fold(R(*f)(R,Fst),R o) {return snd().fold(f,f(o,fst()));}
+    R fold(R(*f)(R,const Fst),R o) {return snd().fold(f,f(o,fst()));}
     template<typename API>
     void forAll() {
       API().operator()(fst());
@@ -70,7 +70,7 @@ namespace Parts {
       -> decltype(Pair<decltype(fmap(fst())),void>(fmap(fst()))) 
       {return Pair<decltype(fmap(fst())),void>(fmap(fst()));}
     template<typename R>
-    R fold(R(*f)(R,Fst),R o) {return f(o,fst());}
+    R fold(R(*f)(R,const Fst),R o) {return f(o,fst());}
     template<typename API>
     void forAll() {API().operator()(fst());}
   };
