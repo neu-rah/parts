@@ -29,6 +29,7 @@
           next=None;
           return f==None?clogDev.print(o):clogDev.print(o,(int)f);
         }
+        void flush() {clogDev.flush();}
       };
       extern CLog clog;
       template<> int CLog::template print<const char*>(const char* o) {return clogDev.print(o);}
