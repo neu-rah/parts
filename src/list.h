@@ -110,7 +110,9 @@ namespace Parts {
 
     template<typename API,int i,typename... Args>
     Idx find(Args... args) 
-      {return API().operator()(head(),args...)?i:tail().template find<API,i+1,Args...>(args...);}
+      {
+        _trace(clog<<"find #"<<i<<endl;clog.flush());
+        return API().operator()(head(),args...)?i:tail().template find<API,i+1,Args...>(args...);}
 
     template<typename API,typename... Args>
     auto map(Args... args) 
@@ -118,13 +120,12 @@ namespace Parts {
         decltype(API().operator()(head(),args...)),
         decltype(tail().template map<API,Args...>(args...))
       > {
+        auto f=API().operator()(head(),args...);
+        auto s=tail().template map<API,Args...>(args...);
       return Pair<
         decltype(API().operator()(head(),args...)),
         decltype(tail().template map<API,Args...>(args...))
-        >(
-        API().operator()(head(),args...),
-        tail().template map<API,Args...>(args...)
-      );
+        >(f,s);
     }
 
     template<typename API,typename... Args>
