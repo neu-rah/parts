@@ -110,9 +110,7 @@ namespace Parts {
 
     template<typename API,int i,typename... Args>
     Idx find(Args... args) 
-      {
-        _trace(clog<<"find #"<<i<<endl;clog.flush());
-        return API().operator()(head(),args...)?i:tail().template find<API,i+1,Args...>(args...);}
+      {return API().operator()(head(),args...)?i:tail().template find<API,i+1,Args...>(args...);}
 
     template<typename API,typename... Args>
     auto map(Args... args) 
