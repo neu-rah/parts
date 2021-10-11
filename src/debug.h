@@ -42,11 +42,11 @@
       template<typename T>
       CLog& operator<<(CLog& o,T t) {clog.print(t);return o;}
     #else
+      #include <iostream>
+      #include <bitset>
       #ifdef CLOG_DEVICE
         #define clogDev CLOG_DEVICE
       #else
-        #include <iostream>
-        #include <bitset>
         #define clogDev (std::cout)
       #endif
     //   enum CLogFmt {NO_FMT,HEX,DEC,OCT,BIN};
