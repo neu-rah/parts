@@ -42,6 +42,7 @@
     #define clogDev (std::cout)
   #endif
   #define endl "\n\r"
+  #define clog clogDev
 //   enum CLogFmt {NO_FMT,HEX,DEC,OCT,BIN};
 //   struct CLog {
 //     enum Fmt:int {None=0,Hex=16,Dec=10,Oct=8,Bin=2};
